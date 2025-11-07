@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registro de Retirada de Equipamento</title>
+  <style>
+    /* --- Estilos Globais --- */
+    :root {
+      --cor-primaria: #005a9c; /* Azul corporativo */
+      --cor-fundo: #f4f7f6;
+      --cor-cartao: #ffffff;
+      --cor-texto: #333333;
+      --cor-mutada: #666666;
+      --cor-linha: #dee2e6;
+      --cor-perigo: #d9534f;
+      --cor-sucesso: #5cb85c;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--cor-fundo);
+      color: var(--cor-texto);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    .container {
+      max-width: 800px;
+      margin: 24px auto;
+      padding: 24px;
+      background-color: var(--cor-cartao);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    /* NOVO: Estilo para alinhar logo e título */
+    .header-content {
+      display: flex;
+      align-items: flex-start; /* Alinha o texto do título ao topo */
+      gap: 15px;
+      margin-bottom: 24px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--cor-linha);
+    }
+    .header-content img {
+      max-height: 55px; /* Define um tamanho máximo para o logo */
+      width: auto;
+    }
+    .header-text {
+      flex-grow: 1; /* Permite que o texto ocupe o espaço restante */
+    }
+    h1 {
+      color: var(--cor-primaria);
+      margin-top: 0;
+      margin-bottom: 4px;
+      font-size: 1.8rem;
+    }
+    .subtitulo {
+      margin-bottom: 0; /* Removido margem grande de baixo */
+      color: var(--cor-mutada);
+      font-size: 0.95rem;
+    }
+
+    /* --- Seções do Formulário --- */
+    fieldset {
+      border: 1px solid var(--cor-linha);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    legend {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--cor-primaria);
+      padding: 0 8px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--cor-linha);
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--cor-primaria);
+      box-shadow: 0 0 0 2px rgba(0, 90, 156, 0.2);
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .campo {
+      margin-bottom: 16px;
+    }
+    .helper-text {
+      font-size: 0.85rem;
+      color: var(--cor-mutada);
+      margin-top: 4px;
+    }
+
+    /* --- Tabela de Equipamentos --- */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+    }
+    table thead th {
+      text-align: left;
+      background-color: var(--cor-fundo);
+      padding: 10px;
+      color: var(--cor-mutada);
+      font-size: 0.9rem;
+    }
+    table tbody td {
+      border-bottom: 1px solid var(--cor-linha);
+      padding: 8px;
+      vertical-align: top;
+    }
+    table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .equip-row input {
+      width: 100%;
+      padding: 8px;
+      font-size: 0.95rem;
+    }
+
+    /* --- Botões --- */
+    .botoes-container {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: background-color 0.15s ease, opacity 0.15s ease;
+    }
+    button.primario {
+      background-color: var(--cor-primaria);
+      color: white;
+    }
+    button.primario:hover {
+      background-color: #004a80;
+    }
+    button.secundario {
+      background-color: var(--cor-fundo);
+      color: var(--cor-texto);
+      border: 1px solid var(--cor-linha);
+    }
+    button.secundario:hover {
+      background-color: #e9ecef;
+    }
+    button.perigo {
+      background-color: transparent;
+      color: var(--cor-perigo);
+      padding: 4px 8px;
+    }
+    button.perigo:hover {
+      background-color: rgba(217, 83, 79, 0.1);
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* --- Termo de Aceite --- */
+    .termo-container {
+      background-color: var(--cor-fundo);
+      padding: 16px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: var(--cor-mutada);
+      margin-bottom: 16px;
+    }
+    .termo-checkbox {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .termo-checkbox input {
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+    .termo-checkbox label {
+      font-weight: normal;
+      margin: 0;
+    }
+    .print-only {
+      display: none;
+    }
+
+    /* --- Responsividade --- */
+    @media (max-width: 600px) {
+      .container {
+        margin: 0;
+        padding: 16px;
+      }
+      .grid-2 {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      .header-content {
+        flex-direction: column; /* Empilha logo e título em telas pequenas */
+        align-items: center;
+        text-align: center;
+      }
+      /* Oculta cabeçalhos da tabela e usa labels */
+      table thead {
+        display: none;
+      }
+      table tbody tr {
+        display: block;
+        margin-bottom: 16px;
+        border: 1px solid var(--cor-linha);
+        border-radius: 6px;
+      }
+      table tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border: none;
+      }
+      table tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--cor-texto);
+        margin-right: 16px;
+      }
+      table tbody td:last-child {
+        justify-content: center;
+      }
+      .botoes-container {
+        flex-direction: column;
+      }
+      button {
+        width: 100%;
+      }
+    }
+    
+    /* --- Estilos de Impressão (para Salvar como PDF) --- */
+    @media print {
+      body {
+        background-color: #fff;
+        color: #000;
+        font-size: 11pt;
+      }
+      .container {
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        border: none;
+        width: 100%;
+      }
+      
+      /* Mantém o logo no PDF, mas com tamanho fixo */
+      .header-content {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      .header-content img {
+        max-height: 45px;
+      }
+      
+      /* Esconde botões, checkbox e textos de ajuda */
+      .subtitulo,
+      button,
+      .termo-checkbox,
+      .helper-text {
+        display: none !important;
+      }
+
+      .print-only {
+        display: block !important;
+        margin-top: 12px;
+        font-weight: 600;
+        font-size: 1.1rem;
+      }
+      
+      input, select {
+        border: 1px solid #ccc !important;
+        background: #eee !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      table thead th {
+        background-color: #eee !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      table td, table th {
+        padding: 6px;
+      }
+      
+      .remove-btn {
+        display: none !important;
+      }
+      
+      fieldset {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header-content">
+      <img src="instagram_avatar_CONTEXTO.png" alt="Logo CONTEXTO" />
+      <div class="header-text">
+        <h1>Formulário de Retirada</h1>
+        <p class="subtitulo">Preencha os dados para registrar a saída de equipamentos.</p>
+      </div>
+    </header>
+
+    <form id="formRetirada">
+      <fieldset>
+        <legend>1. Dados do Colaborador</legend>
+        <div class="grid-2">
+          <div class="campo">
+            <label for="nome">Nome Completo</label>
+            <input type="text" id="nome" name="nome" autocomplete="name" required />
+          </div>
+          <div class="campo">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" autocomplete="email" required />
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="campo">
+            <label for="cpf">CPF</label>
+            <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required />
+          </div>
+          <div class="campo">
+            <label for="depto">Departamento</label>
+            <select id="depto" name="depto" required>
+              <option value="">Selecione...</option>
+              <option value="ti">T.I.</option>
+              <option value="rh">Recursos Humanos</option>
+              <option value="financeiro">Financeiro</option>
+              <option value="marketing">Marketing</option>
+              <option value="operacoes">Operações</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>2. Detalhes da Retirada</legend>
+        <div class="grid-2">
+          <div class="campo">
+            <label for="data_retirada">Data da Retirada</label>
+            <input type="date" id="data_retirada" name="data_retirada" required />
+            <p class="helper-text">Caso não lembre a data exata, preencha com a data mais próxima.</p>
+          </div>
+          <div class="campo">
+             <label for="motivo">Motivo da Retirada</label>
+             <select id="motivo" name="motivo" required>
+               <option value="">Selecione...</option>
+               <option value="home_office">Trabalho Remoto (Home Office)</option>
+               <option value="manutencao">Manutenção Externa</option>
+               <option value="evento">Uso em Evento/Cliente</option>
+               <option value="emprestimo">Empréstimo Temporário</option>
+               <option value="outro">Outro</option>
+             </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>3. Equipamentos Retirados</legend>
+        <table id="tabelaEquipamentos">
+          <thead>
+            <tr>
+              <th>Tipo (ex: Notebook)</th>
+              <th>Marca/Modelo</th>
+              <th>Nº de Série / Patrimônio</th>
+              <th>Acessórios (ex: Fonte)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="listaEquipamentos">
+            </tbody>
+        </table>
+        <button type="button" class="secundario" id="btnAddItem">+ Adicionar Equipamento</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>4. Termo de Responsabilidade</legend>
+        <div class="termo-container">
+          <p>Declaro que recebi o(s) equipamento(s) listado(s) acima, os quais pertencem à empresa. Comprometo-me a utilizá-los exclusivamente para fins de trabalho, zelando por sua integridade e conservação.</p>
+          <p>Estou ciente de que devo comunicar imediatamente ao departamento de T.I. sobre qualquer defeito, dano, perda ou roubo. A não devolução ou a devolução do equipamento danificado por mau uso poderá acarretar em responsabilidade e custos.</p>
+        </div>
+        <div class="termo-checkbox">
+          <input type="checkbox" id="termo_aceite" name="termo_aceite" required />
+          <label for="termo_aceite">Li e concordo com o termo de responsabilidade.</label>
+        </div>
+        <span class="print-only">TERMO DE RESPONSABILIDADE ACEITO.</span>
+      </fieldset>
+
+      <div class="botoes-container">
+        <button type="reset" class="secundario">Limpar Formulário</button>
+        <button type="submit" class="primario" id="btnSubmit">Registrar e Salvar em PDF</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      const form = document.getElementById('formRetirada');
+      const dataRetiradaInput = document.getElementById('data_retirada');
+      const btnAddItem = document.getElementById('btnAddItem');
+      const listaEquipamentos = document.getElementById('listaEquipamentos');
+      
+      function preencherDataHoje() {
+        const hoje = new Date();
+        const ano = hoje.getFullYear();
+        const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+        const dia = String(hoje.getDate()).padStart(2, '0');
+        dataRetiradaInput.value = `${ano}-${mes}-${dia}`;
+      }
+
+      function adicionarLinha() {
+        const tr = document.createElement('tr');
+        tr.className = 'equip-row';
+        tr.innerHTML = `
+          <td data-label="Tipo">
+            <input type="text" name="equip_tipo[]" placeholder="Notebook" required />
+          </td>
+          <td data-label="Marca/Modelo">
+            <input type="text" name="equip_modelo[]" placeholder="Dell XPS 15" required />
+          </td>
+          <td data-label="Nº Série">
+            <input type="text" name="equip_serie[]" placeholder="ABC12345" required />
+          </td>
+          <td data-label="Acessórios">
+            <input type="text" name="equip_acessorios[]" placeholder="Fonte, mouse" />
+          </td>
+          <td data-label="Ação">
+            <button type="button" class="perigo remove-btn" title="Remover item">Remover</button>
+          </td>
+        `;
+        listaEquipamentos.appendChild(tr);
+        tr.querySelector('input').focus();
+      }
+
+      function handleTabelaClick(e) {
+        if (e.target.classList.contains('remove-btn')) {
+          e.target.closest('tr').remove();
+        }
+      }
+
+      function handleSubmissao(e) {
+        e.preventDefault();
+        
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        const itensNaTabela = listaEquipamentos.querySelectorAll('tr').length;
+        if (itensNaTabela === 0) {
+          alert('Por favor, adicione ao menos um equipamento à lista.');
+          btnAddItem.focus();
+          return;
+        }
+
+        window.print();
+      }
+
+      // --- Inicialização ---
+      preencherDataHoje();
+      adicionarLinha(); 
+
+      // --- Adicionar Eventos ---
+      btnAddItem.addEventListener('click', adicionarLinha);
+      listaEquipamentos.addEventListener('click', handleTabelaClick);
+      form.addEventListener('submit', handleSubmissao);
+
+    });
+  </script>
+</body>
+</html>
