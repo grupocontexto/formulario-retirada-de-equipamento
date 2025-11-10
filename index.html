@@ -7,7 +7,7 @@
   <style>
     /* --- Estilos Globais --- */
     :root {
-      --cor-primaria: #005a9c; /* Azul corporativo */
+      --cor-primaria: #005a9c;
       --cor-fundo: #f4f7f6;
       --cor-cartao: #ffffff;
       --cor-texto: #333333;
@@ -35,21 +35,20 @@
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
-    /* NOVO: Estilo para alinhar logo e título */
     .header-content {
       display: flex;
-      align-items: flex-start; /* Alinha o texto do título ao topo */
+      align-items: flex-start;
       gap: 15px;
       margin-bottom: 24px;
       padding-bottom: 15px;
       border-bottom: 1px solid var(--cor-linha);
     }
     .header-content img {
-      max-height: 55px; /* Define um tamanho máximo para o logo */
+      max-height: 55px;
       width: auto;
     }
     .header-text {
-      flex-grow: 1; /* Permite que o texto ocupe o espaço restante */
+      flex-grow: 1;
     }
     h1 {
       color: var(--cor-primaria);
@@ -58,7 +57,7 @@
       font-size: 1.8rem;
     }
     .subtitulo {
-      margin-bottom: 0; /* Removido margem grande de baixo */
+      margin-bottom: 0;
       color: var(--cor-mutada);
       font-size: 0.95rem;
     }
@@ -84,15 +83,17 @@
     input[type="text"],
     input[type="email"],
     input[type="date"],
-    select {
+    select,
+    textarea { /* NOVO: Adicionado textarea aos estilos */
       width: 100%;
       padding: 10px 12px;
       border: 1px solid var(--cor-linha);
       border-radius: 6px;
       font-size: 1rem;
+      font-family: inherit; /* Garante que a fonte seja a mesma */
       transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
-    input:focus, select:focus {
+    input:focus, select:focus, textarea:focus { /* NOVO: Adicionado textarea */
       outline: none;
       border-color: var(--cor-primaria);
       box-shadow: 0 0 0 2px rgba(0, 90, 156, 0.2);
@@ -109,33 +110,6 @@
       font-size: 0.85rem;
       color: var(--cor-mutada);
       margin-top: 4px;
-    }
-
-    /* --- Tabela de Equipamentos --- */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 16px;
-    }
-    table thead th {
-      text-align: left;
-      background-color: var(--cor-fundo);
-      padding: 10px;
-      color: var(--cor-mutada);
-      font-size: 0.9rem;
-    }
-    table tbody td {
-      border-bottom: 1px solid var(--cor-linha);
-      padding: 8px;
-      vertical-align: top;
-    }
-    table tbody tr:last-child td {
-      border-bottom: none;
-    }
-    .equip-row input {
-      width: 100%;
-      padding: 8px;
-      font-size: 0.95rem;
     }
 
     /* --- Botões --- */
@@ -168,14 +142,6 @@
     }
     button.secundario:hover {
       background-color: #e9ecef;
-    }
-    button.perigo {
-      background-color: transparent;
-      color: var(--cor-perigo);
-      padding: 4px 8px;
-    }
-    button.perigo:hover {
-      background-color: rgba(217, 83, 79, 0.1);
     }
     button:disabled {
       opacity: 0.6;
@@ -220,35 +186,9 @@
         gap: 0;
       }
       .header-content {
-        flex-direction: column; /* Empilha logo e título em telas pequenas */
+        flex-direction: column;
         align-items: center;
         text-align: center;
-      }
-      /* Oculta cabeçalhos da tabela e usa labels */
-      table thead {
-        display: none;
-      }
-      table tbody tr {
-        display: block;
-        margin-bottom: 16px;
-        border: 1px solid var(--cor-linha);
-        border-radius: 6px;
-      }
-      table tbody td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-        border: none;
-      }
-      table tbody td::before {
-        content: attr(data-label);
-        font-weight: 600;
-        color: var(--cor-texto);
-        margin-right: 16px;
-      }
-      table tbody td:last-child {
-        justify-content: center;
       }
       .botoes-container {
         flex-direction: column;
@@ -272,8 +212,6 @@
         border: none;
         width: 100%;
       }
-
-      /* Mantém o logo no PDF, mas com tamanho fixo */
       .header-content {
         display: flex;
         align-items: center;
@@ -282,42 +220,24 @@
       .header-content img {
         max-height: 45px;
       }
-
-      /* Esconde botões, checkbox e textos de ajuda */
       .subtitulo,
       button,
       .termo-checkbox,
       .helper-text {
         display: none !important;
       }
-
       .print-only {
         display: block !important;
         margin-top: 12px;
         font-weight: 600;
         font-size: 1.1rem;
       }
-
-      input, select {
+      input, select, textarea { /* NOVO: Adicionado textarea */
         border: 1px solid #ccc !important;
         background: #eee !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
-
-      table thead th {
-        background-color: #eee !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-      table td, table th {
-        padding: 6px;
-      }
-
-      .remove-btn {
-        display: none !important;
-      }
-
       fieldset {
         page-break-inside: avoid;
       }
@@ -391,20 +311,11 @@
 
       <fieldset>
         <legend>3. Equipamentos Retirados</legend>
-        <table id="tabelaEquipamentos">
-          <thead>
-            <tr>
-              <th>Tipo (ex: Notebook)</th>
-              <th>Marca/Modelo</th>
-              <th>Nº de Série / Patrimônio</th>
-              <th>Acessórios (ex: Fonte)</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="listaEquipamentos">
-            </tbody>
-        </table>
-        <button type="button" class="secundario" id="btnAddItem">+ Adicionar Equipamento</button>
+        <div class="campo">
+          <label for="equipamentos_desc">Descrição dos Equipamentos</label>
+          <textarea id="equipamentos_desc" name="equipamentos_desc" rows="6" placeholder="Descreva todos os itens retirados. Ex:&#10;- Notebook Dell (Patrimônio 123) com fonte&#10;- Mouse Logitech sem fio (Patrimônio 456)&#10;- Teclado USB" required></textarea>
+          <p class="helper-text">Liste todos os equipamentos, incluindo marca, modelo, patrimônio (se houver) e acessórios (fontes, cabos, etc.).</p>
+        </div>
       </fieldset>
 
       <fieldset>
@@ -427,14 +338,33 @@
     </form>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
 
+      // --- Configuração do Supabase ---
+      const SUPABASE_URL = 'https://gehspakdykknfkpmyauz.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdlaHNwYWtkeWtrbmZrcG15YXV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI1MzYxOTIsImV4cCI6MjA3ODExMjE5Mn0.3f-JSUTlMfRSeupsyQ_IbQ3riOPOJW4pmVPn7ZE6cyI';
+      
+      let supabaseClient; 
+      
+      try {
+         supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      } catch (e) {
+         console.error('Falha ao inicializar o Supabase:', e);
+         alert('Falha ao conectar com o banco de dados. Verifique a configuração.');
+         document.getElementById('btnSubmit').disabled = true;
+         return;
+      }
+      // --- FIM: Configuração do Supabase ---
+
+      // --- Seletores do DOM ---
       const form = document.getElementById('formRetirada');
       const dataRetiradaInput = document.getElementById('data_retirada');
-      const btnAddItem = document.getElementById('btnAddItem');
-      const listaEquipamentos = document.getElementById('listaEquipamentos');
+      const btnSubmit = document.getElementById('btnSubmit');
 
+      // --- Funções Auxiliares ---
       function preencherDataHoje() {
         const hoje = new Date();
         const ano = hoje.getFullYear();
@@ -443,61 +373,66 @@
         dataRetiradaInput.value = `${ano}-${mes}-${dia}`;
       }
 
-      function adicionarLinha() {
-        const tr = document.createElement('tr');
-        tr.className = 'equip-row';
-        tr.innerHTML = `
-          <td data-label="Tipo">
-            <input type="text" name="equip_tipo[]" placeholder="Notebook" required />
-          </td>
-          <td data-label="Marca/Modelo">
-            <input type="text" name="equip_modelo[]" placeholder="Dell XPS 15" required />
-          </td>
-          <td data-label="Nº Série">
-            <input type="text" name="equip_serie[]" placeholder="ABC12345" required />
-          </td>
-          <td data-label="Acessórios">
-            <input type="text" name="equip_acessorios[]" placeholder="Fonte, mouse" />
-          </td>
-          <td data-label="Ação">
-            <button type="button" class="perigo remove-btn" title="Remover item">Remover</button>
-          </td>
-        `;
-        listaEquipamentos.appendChild(tr);
-        tr.querySelector('input').focus();
-      }
-
-      function handleTabelaClick(e) {
-        if (e.target.classList.contains('remove-btn')) {
-          e.target.closest('tr').remove();
-        }
-      }
-
-      function handleSubmissao(e) {
+      // --- Função de Submissão (Simplificada) ---
+      async function handleSubmissao(e) {
         e.preventDefault();
 
+        // 1. Validação do formulário
         if (!form.checkValidity()) {
           form.reportValidity();
           return;
         }
 
-        const itensNaTabela = listaEquipamentos.querySelectorAll('tr').length;
-        if (itensNaTabela === 0) {
-          alert('Por favor, adicione ao menos um equipamento à lista.');
-          btnAddItem.focus();
-          return;
-        }
+        // 2. Desabilitar botão
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = 'Enviando...';
 
-        window.print();
+        // 3. Coletar dados do formulário
+        const dadosFormulario = {
+          nome: document.getElementById('nome').value,
+          email: document.getElementById('email').value,
+          cpf: document.getElementById('cpf').value,
+          departamento: document.getElementById('depto').value,
+          data_retirada: document.getElementById('data_retirada').value,
+          motivo: document.getElementById('motivo').value,
+          // Pega o texto da textarea e o envia
+          equipamentos: {
+            descricao: document.getElementById('equipamentos_desc').value
+          }
+        };
+
+        // 4. Enviar para o Supabase
+        try {
+          const { data, error } = await supabaseClient
+            .from('retiradas')
+            .insert([dadosFormulario]);
+
+          if (error) {
+            throw error;
+          }
+
+          // 5. Sucesso!
+          alert('Retirada registrada com sucesso no banco de dados!');
+          
+          window.print(); // Gera o PDF
+
+          form.reset(); // Limpa todos os campos
+          preencherDataHoje(); // Preenche a data novamente
+
+        } catch (error) {
+          console.error('Erro ao salvar no Supabase:', error);
+          alert(`Ocorreu um erro ao salvar os dados:\n${error.message}\n\nO PDF não será gerado. Tente novamente.`);
+        } finally {
+          // 6. Reabilitar o botão
+          btnSubmit.disabled = false;
+          btnSubmit.textContent = 'Registrar e Salvar em PDF';
+        }
       }
 
       // --- Inicialização ---
       preencherDataHoje();
-      adicionarLinha();
 
       // --- Adicionar Eventos ---
-      btnAddItem.addEventListener('click', adicionarLinha);
-      listaEquipamentos.addEventListener('click', handleTabelaClick);
       form.addEventListener('submit', handleSubmissao);
 
     });
